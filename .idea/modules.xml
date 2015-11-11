@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TestGoogleFB.iml" filepath="$PROJECT_DIR$/TestGoogleFB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FreeSmsServices.iml" filepath="$PROJECT_DIR$/FreeSmsServices.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

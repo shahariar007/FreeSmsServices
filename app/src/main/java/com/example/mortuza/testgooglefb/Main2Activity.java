@@ -1,11 +1,14 @@
 package com.example.mortuza.testgooglefb;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main2Activity extends AppCompatActivity {
-    TextView smsNumber, smsBody,Totalm;
+    EditText smsNumber, smsBody;
+    TextView Totalm,charcnt;
     Button sendSms;
     String Base64;
     String PhoneNumber;
@@ -34,10 +38,29 @@ public class Main2Activity extends AppCompatActivity {
 
         Getdata();
 
-        smsNumber = (TextView) findViewById(R.id.sendnumber);
-        smsBody = (TextView) findViewById(R.id.sendtext);
+        smsNumber = (EditText) findViewById(R.id.sendnumber);
+        smsBody = (EditText) findViewById(R.id.sendtext);
         sendSms = (Button) findViewById(R.id.btnSend);
         Totalm=(TextView)findViewById(R.id.amount);
+        charcnt=(TextView)findViewById(R.id.charCount);
+        smsBody.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+             charcnt.setText("Word:"+String.valueOf(s.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         Totalm.setText(TotalAmount);
 
         sendSms.setOnClickListener(new View.OnClickListener() {

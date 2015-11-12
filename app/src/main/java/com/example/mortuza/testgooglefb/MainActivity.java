@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    TextView uName, upass;
+    TextView uName, upass, sign;
     Button btnlog;
     String baseCode;
     CheckBox ckbox;
@@ -51,11 +51,19 @@ public class MainActivity extends AppCompatActivity {
         upass = (TextView) findViewById(R.id.upass);
         btnlog = (Button) findViewById(R.id.btnlogin);
         ckbox = (CheckBox) findViewById(R.id.rememberpass);
+        sign = (TextView) findViewById(R.id.signin);
         preferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
         uName.setText(preferences.getString("usernamekey", ""));
         upass.setText(preferences.getString("userpasskey", ""));
-        if(uName.getText().length()==0 &&upass.getText().length()==0 ) ckbox.setChecked(false);
+        if (uName.getText().length() == 0 && upass.getText().length() == 0) ckbox.setChecked(false);
         else ckbox.setChecked(true);
+        sign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         btnlog.setOnClickListener(new View.OnClickListener() {

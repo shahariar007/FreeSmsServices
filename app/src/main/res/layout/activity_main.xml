@@ -5,62 +5,71 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_margin="10dp"
         android:orientation="vertical"
-        android:weightSum="1"
         tools:context=".MainActivity">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="fill_parent"
-            android:layout_height="120dp"
-            android:src="@drawable/banner_sms" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Free Sms Service"
-            android:id="@+id/textView"
-            android:layout_gravity="center_horizontal" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="fill_parent"
+                android:layout_height="120dp"
+                android:src="@drawable/banner_sms" />
 
-        <EditText
-            android:id="@+id/uname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Free Sms Service"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            android:layout_marginTop="30dp"
-            android:ems="10"
-            android:hint="User Name"
-            android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/uname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
 
-        <EditText
-            android:id="@+id/upass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword" />
+                android:layout_marginTop="30dp"
+                android:ems="10"
+                android:hint="User Name"
+                android:inputType="textPersonName" />
 
-        <CheckBox
-            android:id="@+id/rememberpass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Remember me"
-            android:checked="false" />
+            <EditText
+                android:id="@+id/upass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword" />
 
-        <Button
-            android:id="@+id/btnlogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Login" />
+            <CheckBox
+                android:id="@+id/rememberpass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:checked="false"
+                android:text="Remember me" />
 
+            <Button
+                android:id="@+id/btnlogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Login" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/signin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="If you not registered Click here"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#ff0000" />
+        </LinearLayout>
+
 
 </ScrollView>

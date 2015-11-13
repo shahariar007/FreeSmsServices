@@ -24,7 +24,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight=".5"
-                android:text="das"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView

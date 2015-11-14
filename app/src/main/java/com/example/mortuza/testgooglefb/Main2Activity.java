@@ -1,10 +1,13 @@
 package com.example.mortuza.testgooglefb;
 
+import android.app.Service;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,11 +39,11 @@ public class Main2Activity extends AppCompatActivity {
     String message;
     String TotalAmount;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-
 
         Getdata();
 
@@ -49,6 +52,15 @@ public class Main2Activity extends AppCompatActivity {
         sendSms = (Button) findViewById(R.id.btnSend);
         Totalm = (TextView) findViewById(R.id.amount);
         charcnt = (TextView) findViewById(R.id.charCount);
+        if(Base64==null)
+        {
+            Intent c=new Intent();
+            Bundle h=c.getExtras();
+            if(h!=null)
+            {
+                Base64=h.getString("ncode");
+            }
+        }
         smsBody.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -82,11 +94,16 @@ public class Main2Activity extends AppCompatActivity {
 
     }
 
+
     public void VolleySend() {
         StringRequest request = new StringRequest(Request.Method.POST, "https://api.infobip.com/sms/1/text/single", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                GettingNotification();
+                Intent intent = new Intent(getApplicationContext(), NotifyServices.class);
+                intent.putExtra("coded", Base64);
+                intent.putExtra("Number", PhoneNumber);
+
+                getApplication().startService(intent);
 
             }
         }, new Response.ErrorListener() {
@@ -133,71 +150,7 @@ public class Main2Activity extends AppCompatActivity {
             Base64 = b.getString("basecode");
             TotalAmount = b.getString("blnc");
         }
-    }
-
-    public void GettingNotification() {
-
-        StringRequest request = new StringRequest(Request.Method.GET, "https://api.infobip.com/sms/1/reports", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-
-                try {
-                    JSONObject js = new JSONObject(response);
-                    JSONArray ja = js.getJSONArray("results");
-                    for (int i = 0; i < ja.length(); i++) {
-                        JSONObject jo = ja.getJSONObject(i);
-                        String number = jo.getString("to").toString();
-                        JSONObject joPrice = jo.getJSONObject("price");
-                        String price = joPrice.getString("pricePerMessage").toString() + " EUR";
-                        JSONObject joDel = jo.getJSONObject("status");
-                        String joDeli = joDel.getString("groupName").toString();
-                        ToastShow("Number" + number + " cost: " + price + " Delivary " + joDeli);
-                        if(joDeli.equals("DELIVERED")&& PhoneNumber.equals(number))
-                        {
-                            ToastShow("complete");
-                        }
-                        else
-                        {
-                            ToastShow("fail");
-                        }
-
-                    }
-
-
-                    //ToastShow(response);
-                    Log.d("dsad", ja.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ToastShow("Error");
-                error.printStackTrace();
-            }
-        }) {
-
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-                HashMap<String, String> hashMap = new HashMap<>();
-
-                hashMap.put("Host", "api.infobip.com");
-                hashMap.put("Authorization", Base64);
-                hashMap.put("Content-Type", "application/json");
-                hashMap.put("Accept", "application/json");
-
-
-                return hashMap;
-
-            }
-
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        TestVolly.getInstance().addToRequest(request);
+        else Base64=null;
     }
 
 

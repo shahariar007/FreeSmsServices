@@ -60,8 +60,7 @@ public class MainActivity extends AppCompatActivity {
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-                startActivity(intent);
+
             }
         });
 

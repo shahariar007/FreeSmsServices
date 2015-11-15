@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.os.Looper;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +38,8 @@ import org.w3c.dom.Text;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Handler;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String USERNAME = "usernamekey";
     public static final String USERPASS = "userpasskey";
     String url = "If you not registered  <a href=\"https://accounts.infobip.com/signup\">Click here</a>";
-
-
+    InternetConnection connection;
+    Dialog dialog;
     SharedPreferences preferences;
 
 
@@ -56,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        InternetConnection();
+        InternetCnnection();
         uName = (TextView) findViewById(R.id.uname);
         upass = (TextView) findViewById(R.id.upass);
         btnlog = (Button) findViewById(R.id.btnlogin);
@@ -67,8 +71,10 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
         uName.setText(preferences.getString("usernamekey", ""));
         upass.setText(preferences.getString("userpasskey", ""));
+
         sign.setMovementMethod(LinkMovementMethod.getInstance());
         sign.setText(Html.fromHtml(url));
+        connection = new InternetConnection(getApplicationContext());
 
         if (uName.getText().length() == 0 && upass.getText().length() == 0) ckbox.setChecked(false);
         else ckbox.setChecked(true);
@@ -82,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     byte[] data = base64.getBytes("UTF-8");
                     baseCode = "Basic " + Base64.encodeToString(data, Base64.DEFAULT);
-                    Log.d("rrdsad", baseCode);
+                    Log.d("BaseCode", baseCode);
                 } catch (UnsupportedEncodingException e) {
 
                     e.printStackTrace();
@@ -92,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(USERNAME, uName.getText().toString());
                     editor.putString(USERPASS, upass.getText().toString());
-
                     editor.commit();
 
                 } else {
@@ -102,9 +107,10 @@ public class MainActivity extends AppCompatActivity {
                     editor.commit();
 
                 }
+                if (!connection.Net()) {
+                    ToastShow("Need Internet Connection ");
+                } else CheckAccount();
 
-
-                CheckAccount();
 
             }
 
@@ -161,19 +167,60 @@ public class MainActivity extends AppCompatActivity {
         TestVolly.getInstance().addToRequest(request);
     }
 
-    public void InternetConnection() {
-        ConnectivityManager cn = (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo=cn.getActiveNetworkInfo();
-        boolean isconnected=networkInfo!=null && networkInfo.isConnectedOrConnecting();
-        if(isconnected)
-        {
-            ToastShow("connected");
-        }else
-        {
-            final Dialog dialog=new Dialog(getApplicationContext());
-            dialog.setContentView(R.layout.internetdialog);
+    public void InternetCnnection() {
+
+        connection = new InternetConnection(getApplicationContext());
+        if (connection.Net()) {
+
+        } else {
+            Timer tm = new Timer();
+            tm.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogShow();
+                        }
+                    });
+
+
+                }
+            }, 3000);
+
         }
 
+
+    }
+
+    public void DialogShow() {
+        dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.internetdialog);
+        dialog.setTitle("Turn On Internet Connection");
+        Button wifi = (Button) dialog.findViewById(R.id.wifi);
+        Button dataConnection = (Button) dialog.findViewById(R.id.data);
+        Button btncancel = (Button) dialog.findViewById(R.id.can);
+        wifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+        dataConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+
+        });
+        dialog.show();
     }
 
 }

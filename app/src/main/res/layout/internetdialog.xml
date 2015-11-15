@@ -10,22 +10,27 @@
         android:orientation="horizontal">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/wifi"
-            android:layout_margin="5dp"
-            android:text="WiFi OFF"
-            android:drawableTop="@drawable/wifiof"/>
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/data"
             android:layout_margin="5dp"
-            android:text="Data OFF"
-            android:drawableTop="@drawable/dataoff"/>
+            android:drawableTop="@drawable/wifiof"
+            android:text="WiFi OFF" />
 
-
+        <Button
+            android:id="@+id/data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:drawableTop="@drawable/dataoff"
+            android:text="Data OFF" />
     </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/can"
+        android:text="Cancel"
+        android:layout_gravity="center"/>
 
 
 </LinearLayout>

@@ -26,6 +26,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Handler;
 
 /**
  * Created by Mortuza on 11/12/2015.
@@ -53,7 +56,14 @@ public class NotifyServices extends Service {
         Bundle dl = intent.getExtras();
         Base64 = dl.getString("coded");
         PhoneNumber = dl.getString("PhoneNumber");
-        GettingNotification();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                GettingNotification();
+            }
+        }, 20000);
+
         return Service.START_NOT_STICKY;
     }
 
@@ -133,15 +143,13 @@ public class NotifyServices extends Service {
         builder.setAutoCancel(true);
         builder.setContentText("To:" + Number + "\n Cost:" + Cost);
         builder.setContentText("Status:" + Status);
-        Intent intent=new Intent(this,Main2Activity.class);
-        intent.putExtra("ncode",Base64);
-        PendingIntent pendingIntent=PendingIntent.getActivity(getApplication(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(this, Main2Activity.class);
+        intent.putExtra("ncode", Base64);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplication(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        builder.build().flags |= Notification.FLAG_AUTO_CANCEL |Notification.FLAG_SHOW_LIGHTS;
+        builder.build().flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
         notificationManager.notify(notificationid, builder.build());
-
-
 
 
     }

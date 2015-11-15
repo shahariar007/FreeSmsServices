@@ -22,6 +22,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +54,7 @@ public class Main2Activity extends AppCompatActivity {
         sendSms = (Button) findViewById(R.id.btnSend);
         Totalm = (TextView) findViewById(R.id.amount);
         charcnt = (TextView) findViewById(R.id.charCount);
-        
+
         smsBody.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -79,6 +81,7 @@ public class Main2Activity extends AppCompatActivity {
                 PhoneNumber = smsNumber.getText().toString();
                 message = smsBody.getText().toString();
                 VolleySend();
+                CheckAccount();
 
             }
         });
@@ -97,11 +100,12 @@ public class Main2Activity extends AppCompatActivity {
 
                 getApplication().startService(intent);
 
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                ToastShow("Error");
+                ToastShow("check");
                 error.printStackTrace();
             }
         }) {
@@ -144,6 +148,43 @@ public class Main2Activity extends AppCompatActivity {
         } else Base64 = null;
     }
 
+    public void CheckAccount() {
+        StringRequest request = new StringRequest(Request.Method.GET, "https://api.infobip.com/account/1/balance", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    String balance = jo.get("balance").toString();
+                    String Currency = jo.get("currency").toString();
+                    String totalAmount = balance + " " + Currency;
+                    Totalm.setText(totalAmount);
 
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                YoYo.with(Techniques.Wobble).delay(700).playOn(findViewById(R.id.uname));
+                YoYo.with(Techniques.Shake).delay(700).playOn(findViewById(R.id.upass));
+                ToastShow("Login Fail");
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("Host", "api.infobip.com");
+                hashMap.put("Authorization", Base64);
+                hashMap.put("Content-Type", "application/json");
+                hashMap.put("Accept", "application/json");
+                return hashMap;
+            }
+        };
+        TestVolly.getInstance().addToRequest(request);
+
+    }
 }
 

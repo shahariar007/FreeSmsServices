@@ -28,11 +28,12 @@
 
         <EditText
             android:id="@+id/uname"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-
             android:layout_marginTop="30dp"
+            android:drawableLeft="@drawable/user"
+            android:drawablePadding="5dp"
             android:ems="10"
             android:hint="User Name"
             android:inputType="textPersonName" />
@@ -41,6 +42,8 @@
             android:id="@+id/upass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/pass"
+            android:drawablePadding="5dp"
             android:ems="10"
             android:hint="Password"
             android:inputType="textPassword" />

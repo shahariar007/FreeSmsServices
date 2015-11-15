@@ -1,8 +1,11 @@
 package com.example.mortuza.testgooglefb;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,13 +56,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        InternetConnection();
         uName = (TextView) findViewById(R.id.uname);
         upass = (TextView) findViewById(R.id.upass);
         btnlog = (Button) findViewById(R.id.btnlogin);
         ckbox = (CheckBox) findViewById(R.id.rememberpass);
         sign = (TextView) findViewById(R.id.signin);
         freesmstexte = (TextView) findViewById(R.id.freesmstext);
-        YoYo.with(Techniques.StandUp).delay(500).playOn(findViewById(R.id.freesmstext));
+        YoYo.with(Techniques.StandUp).delay(500).duration(5000).playOn(findViewById(R.id.freesmstext));
         preferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
         uName.setText(preferences.getString("usernamekey", ""));
         upass.setText(preferences.getString("userpasskey", ""));
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (uName.getText().length() == 0 && upass.getText().length() == 0) ckbox.setChecked(false);
         else ckbox.setChecked(true);
+
 
         btnlog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("blnc", totalAmount);
                         intent.putExtra("basecode", baseCode);
                         startActivity(intent);
+                        finish();
                     } else ToastShow("UR BALANCE IS 0.Please Create New Account");
 
                 } catch (JSONException e) {
@@ -136,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                ToastShow("ERROR");
-                YoYo.with(Techniques.Shake).delay(700).playOn(findViewById(R.id.uname));
+                YoYo.with(Techniques.Wobble).delay(700).playOn(findViewById(R.id.uname));
                 YoYo.with(Techniques.Shake).delay(700).playOn(findViewById(R.id.upass));
+                ToastShow("Login Fail");
                 error.printStackTrace();
             }
         }) {
@@ -153,6 +159,21 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         TestVolly.getInstance().addToRequest(request);
+    }
+
+    public void InternetConnection() {
+        ConnectivityManager cn = (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=cn.getActiveNetworkInfo();
+        boolean isconnected=networkInfo!=null && networkInfo.isConnectedOrConnecting();
+        if(isconnected)
+        {
+            ToastShow("connected");
+        }else
+        {
+            final Dialog dialog=new Dialog(getApplicationContext());
+            dialog.setContentView(R.layout.internetdialog);
+        }
+
     }
 
 }

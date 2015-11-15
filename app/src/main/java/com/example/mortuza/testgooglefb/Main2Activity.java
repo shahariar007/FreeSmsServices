@@ -52,15 +52,7 @@ public class Main2Activity extends AppCompatActivity {
         sendSms = (Button) findViewById(R.id.btnSend);
         Totalm = (TextView) findViewById(R.id.amount);
         charcnt = (TextView) findViewById(R.id.charCount);
-        if(Base64==null)
-        {
-            Intent c=new Intent();
-            Bundle h=c.getExtras();
-            if(h!=null)
-            {
-                Base64=h.getString("ncode");
-            }
-        }
+        
         smsBody.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -87,7 +79,6 @@ public class Main2Activity extends AppCompatActivity {
                 PhoneNumber = smsNumber.getText().toString();
                 message = smsBody.getText().toString();
                 VolleySend();
-
 
             }
         });
@@ -150,8 +141,7 @@ public class Main2Activity extends AppCompatActivity {
         if (b != null) {
             Base64 = b.getString("basecode");
             TotalAmount = b.getString("blnc");
-        }
-        else Base64=null;
+        } else Base64 = null;
     }
 
 

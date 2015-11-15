@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,15 +33,17 @@ import org.w3c.dom.Text;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Handler;
 
 public class MainActivity extends AppCompatActivity {
-    TextView uName, upass, sign;
+    TextView uName, upass, sign, freesmstexte;
     Button btnlog;
     String baseCode;
     CheckBox ckbox;
     public static final String MYPREFERENCES = "preferkey";
     public static final String USERNAME = "usernamekey";
     public static final String USERPASS = "userpasskey";
+    String url = "If you not registered  <a href=\"https://accounts.infobip.com/signup\">Click here</a>";
 
 
     SharedPreferences preferences;
@@ -52,18 +58,16 @@ public class MainActivity extends AppCompatActivity {
         btnlog = (Button) findViewById(R.id.btnlogin);
         ckbox = (CheckBox) findViewById(R.id.rememberpass);
         sign = (TextView) findViewById(R.id.signin);
+        freesmstexte = (TextView) findViewById(R.id.freesmstext);
+        YoYo.with(Techniques.StandUp).delay(500).playOn(findViewById(R.id.freesmstext));
         preferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
         uName.setText(preferences.getString("usernamekey", ""));
         upass.setText(preferences.getString("userpasskey", ""));
+        sign.setMovementMethod(LinkMovementMethod.getInstance());
+        sign.setText(Html.fromHtml(url));
+
         if (uName.getText().length() == 0 && upass.getText().length() == 0) ckbox.setChecked(false);
         else ckbox.setChecked(true);
-        sign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
 
         btnlog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ToastShow(String ToastText) {
-        Toast.makeText(getApplicationContext(), ToastText, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), ToastText, Toast.LENGTH_SHORT).show();
     }
 
     public void CheckAccount() {
@@ -123,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("blnc", totalAmount);
                         intent.putExtra("basecode", baseCode);
                         startActivity(intent);
-                    } else ToastShow("UR BALANCE IS 0.So Create New Account");
+                    } else ToastShow("UR BALANCE IS 0.Please Create New Account");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -133,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 ToastShow("ERROR");
+                YoYo.with(Techniques.Shake).delay(700).playOn(findViewById(R.id.uname));
+                YoYo.with(Techniques.Shake).delay(700).playOn(findViewById(R.id.upass));
                 error.printStackTrace();
             }
         }) {

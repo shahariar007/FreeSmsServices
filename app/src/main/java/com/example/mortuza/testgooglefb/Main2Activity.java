@@ -87,6 +87,7 @@ public class Main2Activity extends AppCompatActivity {
                 PhoneNumber = smsNumber.getText().toString();
                 message = smsBody.getText().toString();
                 VolleySend();
+                ToastShow("da");
 
             }
         });
